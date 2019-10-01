@@ -1,3 +1,4 @@
+using System.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,14 @@ namespace VirtualLibraryApi.Controllers.v1
     public class OrdersController : ControllerBase
     {
         private readonly AuthService authService;
-        private readonly CreditCardService creditCardService; 
+        private readonly CreditCardService creditCardService;
+        private readonly TransactionLogService transactionLogService; 
 
-        public OrdersController(AuthService authService, CreditCardService creditCardService)
+        public OrdersController(AuthService authService, CreditCardService creditCardService, TransactionLogService transactionLogService)
         {
             this.authService = authService;
             this.creditCardService = creditCardService;
+            this.transactionLogService = transactionLogService;
         }
         
         [HttpGet("{token}")]
@@ -76,14 +79,37 @@ namespace VirtualLibraryApi.Controllers.v1
             return StatusCode(201); 
         }
 
-        [HttpPost("Checkout/{orderId}")]
-        public ActionResult Checkout(int orderId)
+        [HttpPost("Checkout/{orderId}/{creditCardToken}")]
+        public ActionResult Checkout(int orderId, string creditCardToken)
         {
             if(!Startup.Orders.Any(o => o.OrderId == orderId))
                 return Conflict(new { message = "Order not found"});
 
             var order = Startup.Orders.Where(o => o.OrderId == orderId).SingleOrDefault();
 
+            var paymentDTO = new PaymentDTO()
+            { 
+                UserId = order.User.Id, 
+                CreditCardToken = creditCardToken,
+                Value = order.Basket.Total
+            };
+            var paymentResponse = creditCardService.Pay(paymentDTO);
+
+            if(paymentResponse != Ok())
+                return Conflict(paymentResponse.ErrorMessage);
+
+            var transacao = new Transacao()
+            {
+                Data = DateTime.Now,
+                PedidoId = order.OrderId,
+                UsuarioId = order.User.Id,
+                Valor = (decimal)(order.Basket.Total)
+            };
+
+            var transaction = transactionLogService.Log(transacao);
+
+            if(transaction != Ok())
+                return Conflict(transaction.ErrorMessage);
 
             order.OrderStatus = OrderStatus.ReadyForShip;
 

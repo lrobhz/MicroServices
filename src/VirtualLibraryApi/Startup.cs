@@ -14,6 +14,7 @@ using src.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using VirtualLibraryApi.Models;
 using VirtualLibraryApi.Auth;
+using VirtualLibraryApi.Payment;
 
 namespace VirtualLibraryApi
 {
@@ -27,14 +28,14 @@ namespace VirtualLibraryApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
+            var random = new Random();
             Books = new List<Book>() 
             { 
-                new Book() { BookId = 1, BookName = "Book1", Author = "Author1", Description = "Lorem ipsum dolor sit amet, consectetur " },
-                new Book() { BookId = 2, BookName = "Book2", Author = "Author2", Description = "Lorem ipsum dolor sit amet, consectetur " },
-                new Book() { BookId = 3, BookName = "Book3", Author = "Author3", Description = "Lorem ipsum dolor sit amet, consectetur " },
-                new Book() { BookId = 4, BookName = "Book4", Author = "Author4", Description = "Lorem ipsum dolor sit amet, consectetur " },
-                new Book() { BookId = 5, BookName = "Book5", Author = "Author5", Description = "Lorem ipsum dolor sit amet, consectetur " }
+                new Book() { BookId = 1, BookName = "Book1", Author = "Author1", Description = "Lorem ipsum dolor sit amet, consectetur ", Value = (float)(random.NextDouble() * 100)},
+                new Book() { BookId = 2, BookName = "Book2", Author = "Author2", Description = "Lorem ipsum dolor sit amet, consectetur ", Value = (float)(random.NextDouble() * 100) },
+                new Book() { BookId = 3, BookName = "Book3", Author = "Author3", Description = "Lorem ipsum dolor sit amet, consectetur ", Value = (float)(random.NextDouble() * 100) },
+                new Book() { BookId = 4, BookName = "Book4", Author = "Author4", Description = "Lorem ipsum dolor sit amet, consectetur ", Value = (float)(random.NextDouble() * 100) },
+                new Book() { BookId = 5, BookName = "Book5", Author = "Author5", Description = "Lorem ipsum dolor sit amet, consectetur ", Value = (float)(random.NextDouble() * 100) }
             };
         }
 
@@ -46,6 +47,8 @@ namespace VirtualLibraryApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
             services.AddScoped<AuthService>();
+            services.AddScoped<CreditCardService>();
+            services.AddScoped<TransactionLogService>();            
 
             services.AddSwaggerGen(c =>
             {
