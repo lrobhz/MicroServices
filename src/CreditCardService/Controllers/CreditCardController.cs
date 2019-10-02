@@ -71,7 +71,7 @@ namespace CreditCardService.Controllers
         public ActionResult Pay([FromBody] PaymentDTO paymentDTO)
         {
             if(paymentDTO == null || !Startup.Users.ContainsKey(paymentDTO.UserId) ||
-                !!Startup.Users[paymentDTO.UserId].CreditCards.Any(c => c.CreditCardToken.Equals(paymentDTO.CreditCardToken)))
+                !Startup.Users[paymentDTO.UserId].CreditCards.Any(c => c.CreditCardToken.Equals(paymentDTO.CreditCardToken)))
                 return Conflict(new { message = "Invalid payment data!"});
 
             var creditCard = Startup.Users[paymentDTO.UserId].CreditCards

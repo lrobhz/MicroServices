@@ -20,6 +20,22 @@ namespace src.Controllers.v1
             this.authService = authService;
         }
 
+        [HttpGet("{token}")]
+        public ActionResult<Basket> ListBeskets(string token)
+        {
+            var user = authService.CheckToken(token);
+
+            if(user == null)
+            {
+                return Conflict(new { message = $"Invalid user session token!"});
+            }
+            
+            if(Startup.Baskets.ContainsKey(user.Id))
+                return Startup.Baskets[user.Id];
+
+            return NoContent();
+        }
+
         [HttpGet("{token}/Books")]
         public ActionResult<IEnumerable<Book>> ListCartBooks(string token)
         {
@@ -48,7 +64,8 @@ namespace src.Controllers.v1
 
             if(!Startup.Baskets.ContainsKey(user.Id))
             {
-                Startup.Baskets.Add(user.Id, new Basket() { User = user, Books = new List<Book>() });
+                Startup.Baskets.Add(user.Id, new Basket() { BasketId = Startup.Baskets.Count() + 1, 
+                     User = user, Books = new List<Book>() });
             }
 
             var book = Startup.Books.Where(b => b.BookId == bookId).SingleOrDefault();

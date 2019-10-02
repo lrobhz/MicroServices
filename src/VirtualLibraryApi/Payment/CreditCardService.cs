@@ -6,12 +6,12 @@ namespace VirtualLibraryApi.Payment
 {
     public class CreditCardService
     {
-        private string creditCardApiBasePath = "http://localhost:6000/api/v1/CreditCard";
+        private string creditCardApiBasePath = "https://localhost:6001/api/v1/CreditCard";
         public IRestResponse Pay(PaymentDTO paymentDTO)
         {
             var client = new RestClient(creditCardApiBasePath);
-            var request = new RestRequest($"pay", Method.POST);
-            request.AddParameter("paymentDTO", paymentDTO, ParameterType.RequestBody);
+            var request = new RestRequest("pay", Method.POST);
+            request.AddJsonBody(paymentDTO);
 
             var response = client.Execute(request);
             

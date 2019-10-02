@@ -1,3 +1,4 @@
+using System.Net;
 using System.Transactions;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,8 @@ namespace VirtualLibraryApi.Controllers.v1
                 OrderStatus = OrderStatus.Created
             };
 
+            Startup.Orders.Add(order);
+
             return StatusCode(201); 
         }
 
@@ -95,7 +98,7 @@ namespace VirtualLibraryApi.Controllers.v1
             };
             var paymentResponse = creditCardService.Pay(paymentDTO);
 
-            if(paymentResponse != Ok())
+            if(paymentResponse.StatusCode != HttpStatusCode.OK)
                 return Conflict(paymentResponse.ErrorMessage);
 
             var transacao = new Transacao()
@@ -108,7 +111,7 @@ namespace VirtualLibraryApi.Controllers.v1
 
             var transaction = transactionLogService.Log(transacao);
 
-            if(transaction != Ok())
+            if(transaction.StatusCode != HttpStatusCode.OK)
                 return Conflict(transaction.ErrorMessage);
 
             order.OrderStatus = OrderStatus.ReadyForShip;

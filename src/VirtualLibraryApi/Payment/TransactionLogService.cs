@@ -5,12 +5,12 @@ namespace VirtualLibraryApi.Payment
 {
     public class TransactionLogService
     {
-        private string transactionBasePath = "http://localhost:6000/api/v1/public/Transacoes";
+        private string transactionBasePath = "https://localhost:7001/api/v1/public/Transacoes";
         public IRestResponse Log(Transacao transacao)
         {
             var client = new RestClient(transactionBasePath);
             var request = new RestRequest(Method.POST);
-            request.AddParameter("transacao", transacao, ParameterType.RequestBody);
+            request.AddJsonBody(transacao);
 
             var response = client.Execute(request);
             

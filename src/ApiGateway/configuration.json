@@ -1,0 +1,101 @@
+{
+    "ReRoutes": [
+        {
+            "DownstreamPathTemplate": "/api/{version}/Autenticacao/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 50000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/{version}/Autenticacao/{everything}",
+            "UpstreamHttpMethod": [
+                "POST",
+                "PUT",
+                "GET"
+            ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/Basket/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/{version}/Basket/{everything}",
+            "UpstreamHttpMethod": [
+                "POST",
+                "PUT",
+                "GET"
+            ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/Orders/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/{version}/Orders/{everything}",
+            "UpstreamHttpMethod": [
+                "POST",
+                "PUT",
+                "GET"
+            ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/CreditCard/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 6000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/{version}/CreditCard/{everything}",
+            "UpstreamHttpMethod": [
+                "POST",
+                "PUT",
+                "GET"
+            ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/public/Transacoes/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/{version}/public/Transacoes/{everything}",
+            "UpstreamHttpMethod": [
+                "POST",
+                "PUT",
+                "GET"
+            ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/public/Transacoes/",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/{version}/public/Transacoes/",
+            "UpstreamHttpMethod": [
+                "POST",
+                "PUT",
+                "GET"
+            ]
+        }
+    ],
+    "GlobalConfiguration": {}
+}
